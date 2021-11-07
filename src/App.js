@@ -1,46 +1,48 @@
-import Button from "./Button";
-import styles from "./App.module.css";
 import {useState, useEffect} from "react";
 
-function App() {
-    const [counter, setValue] = useState(0);
-    const [keyword, setKeyword] = useState("");
-    const onClick = () => setValue((prev) => prev + 1);
-    const onChange = (event) => {
-        setKeyword(event.target.value);
+/*
+* useEffect를 활용하는 방법과, 생성, 소멸시 리턴 받는 법 등.
+* 별도의 함수를 만들어서 할당해주는 방법도 있다. hiFn처럼
+* 하지만 보통은 useEffect에 주로 작성한다. hiFn, byFn처럼 여러가지를 만들진 않는다.
+* */
+function Hello(){
+    /*const byFn = ()=>{
+        console.log("bye :(");
     }
+    const hiFn= ()=>{
+        console.log("created :)");
+        return byFn; //clean up function 으로 주로 사용하진 않음.
+    }*/
 
-    //1회만 실행, 감지를 지정해 주지 않았으니,
-    useEffect(() => {
-        console.log("I run only once.");
-    }, []);
-
-    //keyword를 감지하도록 지정
-    useEffect(()=> {
-        console.log("I run when 'keyword' changes.");
-
-    },[keyword]);
-
-    //counter 변경 감지
-    useEffect(()=> {
-        console.log("I run when 'counter' changes.");
-
-    },[counter]);
-
-    //2개를 동시에 지정할 수도 있음.
+    //arrow function 방식과
     useEffect(()=>{
-        console.log("I run when 'keyword' and 'counter' changes.");
-    },[keyword,counter]);
+        console.log("hi :)");
+        return ()=>{
+            console.log("bye :(");
+        }
+    },[]);
+
+    //기존 정의방식 : 길어...
+    /*useEffect(function(){
+        console.log("hi :)");
+        return function(){
+            console.log("bye :(");
+        }
+    },[]);
+*/
+
+    return <h1>Hello</h1>
+}
+
+function App() {
+    const [showing, setShowing] = useState(false);
+    const onClick = () => {
+        setShowing((prev) => !prev);
+    }
     return (
         <div>
-            <input
-                value={keyword}
-                onChange={onChange}
-                type="text"
-                placeholder="Search here"
-            />
-            <h1>{counter}</h1>
-            <button onClick={onClick}>Click me</button>
+            {showing ? <Hello/> : null}
+            <button onClick={onClick}> {showing ? "Hide": "Show"}</button>
         </div>
     );
 }
